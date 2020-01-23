@@ -3,10 +3,11 @@ import numpy as np
 import matlab.engine
 from scipy.io import savemat
 import os
-import pprint 
+from time import time
 
 def main(args):
-    file_dir = os.path.dirname(os.path.realpath(__file__))
+
+    start_time = time()
     eng = matlab.engine.start_matlab()
     eng.addpath(os.path.join(file_dir, 'matlab_engine'))
     eng.addpath(os.path.join(file_dir, r'matlab_engine/weight_utils'))
@@ -30,9 +31,12 @@ def main(args):
         'num_dec_vars': matlab.double([args.num_decision_vars])
     }
 
+
     L = eng.solve_LipSDP(network, lip_params, nargout=1)
 
-    print(f'LipSDP-{args.form.capitalize()} gives a Lipschitz constant of %.03f' % L)
+    if lip_params['verbose']:
+        print(f'LipSDP-{args.form.capitalize()} gives a Lipschitz constant of %.03f' % L)
+    ''    print('Total time %.03f' % (time() - start_time))
 
 
 if __name__ == '__main__':
