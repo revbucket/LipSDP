@@ -3,14 +3,15 @@ import numpy as np
 import matlab.engine
 from scipy.io import savemat
 import os
+import pprint 
 
 def main(args):
-
+    file_dir = os.path.dirname(os.path.realpath(__file__))
     eng = matlab.engine.start_matlab()
-    eng.addpath(r'matlab_engine')
-    eng.addpath(r'matlab_engine/weight_utils')
-    eng.addpath(r'matlab_engine/error_messages')
-    eng.addpath(r'examples/saved_weights')
+    eng.addpath(os.path.join(file_dir, 'matlab_engine'))
+    eng.addpath(os.path.join(file_dir, r'matlab_engine/weight_utils'))
+    eng.addpath(os.path.join(file_dir, r'matlab_engine/error_messages'))
+    eng.addpath(os.path.join(file_dir, r'examples/saved_weights'))
 
     network = {
         'alpha': matlab.double([args.alpha]),
@@ -30,7 +31,8 @@ def main(args):
     }
 
     L = eng.solve_LipSDP(network, lip_params, nargout=1)
-    print(f'LipSDP-{args.form.capitalize()} gives a Lipschitz constant of {L:.3f}')
+
+    print(f'LipSDP-{args.form.capitalize()} gives a Lipschitz constant of %.03f' % L)
 
 
 if __name__ == '__main__':
