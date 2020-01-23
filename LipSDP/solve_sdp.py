@@ -36,7 +36,7 @@ def main(args):
 
     if lip_params['verbose']:
         print(f'LipSDP-{args.form.capitalize()} gives a Lipschitz constant of %.03f' % L)
-    ''    print('Total time %.03f' % (time() - start_time))
+        print('Total time %.03f' % (time() - start_time))
 
 
 if __name__ == '__main__':
